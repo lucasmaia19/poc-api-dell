@@ -62,7 +62,7 @@ public class GerarPdfController {
 
 		String tmpDirectory = System.getProperty("java.io.tmpdir");
 		
-		String filename = (tmpDirectory + "\\servicosDetran.pdf" );
+		String filename = (tmpDirectory + "//servicosDetran.pdf");
 //		String filename = "C:\\Users\\Developer\\Downloads\\selenium\\servicosDetran.pdf";
 		
 		File file = new File(filename);
