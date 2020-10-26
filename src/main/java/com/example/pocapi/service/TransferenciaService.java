@@ -241,7 +241,7 @@ public class TransferenciaService {
 		WebElement searchBoxConfirmarPreCadastro = driver.findElement(By.id("btnConfirmarDadosAquisicaoVeiculo"));
 		searchBoxConfirmarPreCadastro.click();
 
-//		driver.switchTo().alert().accept();
+		driver.switchTo().alert().accept();
 
 		System.out.println("Finalizado transferencia");
 
