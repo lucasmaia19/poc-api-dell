@@ -54,12 +54,6 @@ public class GerarPdfController {
 	@GetMapping(value = "/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<Object> PegarPDF() throws IOException {
 
-//		ClassPathResource file = new ClassPathResource("servicosDetran.pdf");
-//		Resource file = (Resource) resourceLoader.getResource("C:\\Users\\Developer\\Downloads\\selenium\\servicosDetran.pdf");
-//		InputStream inputStream = ((ClassPathResource) file).getInputStream();
-		
-//		String filename = downloadFilePath;
-
 		String tmpDirectory = System.getProperty("java.io.tmpdir");
 		
 		String filename = (tmpDirectory + "//servicosDetran.pdf");
@@ -77,10 +71,6 @@ public class GerarPdfController {
 		      MediaType.parseMediaType("application/txt")).body(resource);
 
 		   return responseEntity;
-
-//		ResponseEntity<InputStreamResource> response = new ResponseEntity<InputStreamResource>(
-//				new InputStreamResource(((ClassPathResource) file).getInputStream()), headers, HttpStatus.OK);
-//		return response;
 	}
 
 	@GetMapping
