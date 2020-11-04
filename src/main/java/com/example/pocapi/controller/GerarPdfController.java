@@ -3,8 +3,9 @@ package com.example.pocapi.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,10 @@ public class GerarPdfController {
 	 */
 
 	@GetMapping(value = "/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	public ResponseEntity<Object> PegarPDF() throws IOException {
+	public ResponseEntity<Object> PegarPDF() throws IOException, InterruptedException {
+		
+		System.out.println("Espera 30 segundos");
+        Thread.sleep(30000);
 
 		String tmpDirectory = System.getProperty("java.io.tmpdir");
 		
@@ -73,6 +77,7 @@ public class GerarPdfController {
 		   return responseEntity;
 	}
 
+
 	@GetMapping
 	public List<Formulario> ListaPlaca() {
 		return transferenciaRepository.findAll();
@@ -89,9 +94,18 @@ public class GerarPdfController {
 	}
 
 	@DeleteMapping("/{id}")
-	public String deletar(@PathVariable Long id) {
+// @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
+//	@DeleteMapping(path = "/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
+//	public Map<String, Object> deletar(@PathVariable Long id) {
+	public Map<String, Object> deletar(@PathVariable Long id) {
 		transferenciaRepository.deleteById(id);
-		return "A cidade com Id: " + id + " Foi deletado com sucesso";
+		
+//		return "A cidade com Id: " + id + " Foi deletado com sucesso";
+		
+		Map<String, Object> responseMap = new HashMap<>();
+		responseMap.put("TestoDaResposta", "A cidade com Id: " + id + " Foi deletado com sucesso");
+		return responseMap;
+		
 	}
 
 	@PutMapping("/{id}")

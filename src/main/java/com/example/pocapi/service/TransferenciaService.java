@@ -51,7 +51,7 @@ public class TransferenciaService {
 
 		// Compilar sem abrir janela
 		ChromeOptions options = new ChromeOptions();
-		options.setHeadless(true);
+		options.setHeadless(false);
 		options.setExperimentalOption("prefs", chromePref);
 
 		driver = new ChromeDriver(options);
@@ -241,16 +241,9 @@ public class TransferenciaService {
 		WebElement searchBoxConfirmarPreCadastro = driver.findElement(By.id("btnConfirmarDadosAquisicaoVeiculo"));
 		searchBoxConfirmarPreCadastro.click();
 
-		driver.switchTo().alert().accept();
+//		driver.switchTo().alert().accept();
 
 		System.out.println("Finalizado transferencia");
-
-//		getClass().getResourceAsStream("C:\\Users\\Developer\\Downloads\\selenium");
-		
-//		String path = new File("C:\\Users\\Developer\\Downloads\\selenium").getCanonicalPath();
-		
-//		upload.sendKeys("C:\\Users\\Developer\\Downloads\\selenium");
-//		webDriver.findElement(By.id("add")).click();
 		
 	}
 
