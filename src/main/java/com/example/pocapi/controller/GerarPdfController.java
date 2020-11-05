@@ -55,8 +55,8 @@ public class GerarPdfController {
 	@GetMapping(value = "/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<Object> PegarPDF() throws IOException, InterruptedException {
 		
-		System.out.println("Espera 30 segundos");
-        Thread.sleep(30000);
+		System.out.println("Espera 10 segundos");
+        Thread.sleep(10000);
 
 		String tmpDirectory = System.getProperty("java.io.tmpdir");
 		
@@ -72,7 +72,7 @@ public class GerarPdfController {
 
 		 ResponseEntity<Object> 
 		   responseEntity = ResponseEntity.ok().headers(headers).contentLength(file.length()).contentType(
-		      MediaType.parseMediaType("application/txt")).body(resource);
+		      MediaType.parseMediaType("application/pdf")).body(resource);
 
 		   return responseEntity;
 	}
@@ -103,7 +103,7 @@ public class GerarPdfController {
 //		return "A cidade com Id: " + id + " Foi deletado com sucesso";
 		
 		Map<String, Object> responseMap = new HashMap<>();
-		responseMap.put("TestoDaResposta", "A cidade com Id: " + id + " Foi deletado com sucesso");
+		responseMap.put("TestoDaResposta", "O cadastro com Id: " + id + " Foi deletado com sucesso");
 		return responseMap;
 		
 	}
