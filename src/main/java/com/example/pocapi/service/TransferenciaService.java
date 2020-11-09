@@ -1,9 +1,11 @@
 package com.example.pocapi.service;
 
 import java.awt.AWTException;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -55,6 +57,10 @@ public class TransferenciaService {
 		options.setExperimentalOption("prefs", chromePref);
 
 		driver = new ChromeDriver(options);
+		
+		// Deletar arquivo
+		File file = new File(tmpDirectory + "servicosDetran.pdf");
+		FileUtils.deleteDirectory(file);
 
 	}
 
@@ -241,7 +247,7 @@ public class TransferenciaService {
 		WebElement searchBoxConfirmarPreCadastro = driver.findElement(By.id("btnConfirmarDadosAquisicaoVeiculo"));
 		searchBoxConfirmarPreCadastro.click();
 
-//		driver.switchTo().alert().accept();
+		driver.switchTo().alert().accept();
 
 		System.out.println("Finalizado transferencia");
 		

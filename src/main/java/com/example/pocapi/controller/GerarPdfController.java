@@ -130,5 +130,15 @@ public class GerarPdfController {
 		return transferenciaRepository.save(formulario);
 
 	}
+	
+	@GetMapping("/debug")
+	public String debug() throws InterruptedException {
+		Thread.sleep(3000);
+
+		if (Math.random() > 0.5) 
+			throw new RuntimeException("Deu ruim aqui :(");
+		else
+			return "debug";
+	}
  
 }
