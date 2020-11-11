@@ -25,30 +25,26 @@ public class TransferenciaService {
 	public void transferenciaPdf(Formulario formulario) throws Exception {
 		System.out.println("Transferencia PDF executada");
 
-		setUp();
+		String tmpDirectory = System.getProperty("java.io.tmpdir");
+
+		deletarArquivo(tmpDirectory);
+
+		setUp(tmpDirectory);
 
 		teste(formulario);
 
 		closeAba();
 	}
 
-	private void setUp() throws Exception {
+	private void setUp(String tmpDirectory) throws Exception {
 
 //		System.setProperty("webdriver.chrome.driver", "C:\\drives\\chromedriver.exe");
 		WebDriverManager.chromedriver().setup();
 
-//		String downloadFilePath = "C:\\Users\\Developer\\Downloads\\selenium";
-
-		String tmpDirectory = System.getProperty("java.io.tmpdir");
-		System.out.println("tmpDirectory: " + tmpDirectory);
-//		C:\Users\DEVELO~1\AppData\Local\Temp\
-		String downloadFilePath = tmpDirectory;
-		System.out.println("downloadFilePath: " + downloadFilePath);
-
 		// Download pdf
 		HashMap<String, Object> chromePref = new HashMap<String, Object>();
 		chromePref.put("download.prompt_for_download", false);
-		chromePref.put("download.default_directory", downloadFilePath);
+		chromePref.put("download.default_directory", tmpDirectory);
 		chromePref.put("plugins.always_open_pdf_externally", true);
 
 		// Compilar sem abrir janela
@@ -57,11 +53,18 @@ public class TransferenciaService {
 		options.setExperimentalOption("prefs", chromePref);
 
 		driver = new ChromeDriver(options);
-		
-		// Deletar arquivo
-		File file = new File(tmpDirectory + "servicosDetran.pdf");
-		FileUtils.deleteDirectory(file);
+	}
 
+	private void deletarArquivo(String tmpDirectory) {
+		File file = new File(tmpDirectory + "servicosDetran.pdf");
+
+//		boolean apagado = FileUtils.deleteQuietly(file);
+//		if (apagado) {
+//			System.out.println("Arquivo apagado");
+//		}
+
+		if (FileUtils.deleteQuietly(file))
+			System.out.println("Arquivo apagado");
 	}
 
 	private void closeAba() {

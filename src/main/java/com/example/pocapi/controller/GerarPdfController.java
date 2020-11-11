@@ -3,9 +3,17 @@ package com.example.pocapi.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +37,29 @@ import com.example.pocapi.service.TransferenciaService;
 @RestController
 @RequestMapping("api")
 public class GerarPdfController {
+	
+	void conversao(@RequestBody Formulario formulario, @PathVariable Long id) {
+		
+		// Recebe data string com formato instant dataAquisicao
+		Instant dataAquisicaoInstant = Instant.parse(formulario.getDataAquisicao());
+		OffsetDateTime dataAquisicaoOffSet = dataAquisicaoInstant.atOffset(ZoneOffset.UTC); 
+		
+		DateTimeFormatter formatadorAquisicao = DateTimeFormatter.ofPattern("ddMMyyyy");
+		String dataAquisicaoString = dataAquisicaoOffSet.format(formatadorAquisicao);
+		
+		// Recebe data string com formato instant dataLeilao
+		Instant dataLeilaoInstant = Instant.parse(formulario.getDataLeilao());
+		OffsetDateTime dataLeilaoOffSet = dataLeilaoInstant.atOffset(ZoneOffset.UTC); 
+		
+		DateTimeFormatter formatadorLeilao = DateTimeFormatter.ofPattern("ddMMyyyy");
+		String dataLeilaoString = dataLeilaoOffSet.format(formatadorLeilao);
+		
+		
+		// ...
+		formulario.setDataAquisicao(dataAquisicaoString);
+		
+		formulario.setDataLeilao(dataLeilaoString);
+	}
 
 	@Autowired
 	TransferenciaService transferenciaService;
@@ -55,8 +86,8 @@ public class GerarPdfController {
 	@GetMapping(value = "/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<Object> PegarPDF() throws IOException, InterruptedException {
 		
-		System.out.println("Espera 10 segundos");
-        Thread.sleep(10000);
+//		System.out.println("Espera 10 segundos");
+//        Thread.sleep(10000);
 
 		String tmpDirectory = System.getProperty("java.io.tmpdir");
 		
@@ -105,20 +136,26 @@ public class GerarPdfController {
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("TestoDaResposta", "O cadastro com Id: " + id + " Foi deletado com sucesso");
 		return responseMap;
-		
+
 	}
 
 	@PutMapping("/{id}")
 	public Formulario atualizar(@RequestBody Formulario formulario, @PathVariable Long id) {
+
 		Formulario formularioSaved = transferenciaRepository.findById(id).get();
 
+		conversao(formulario, id);
+		
 		BeanUtils.copyProperties(formulario, formularioSaved, "id");
 
 		return transferenciaRepository.save(formularioSaved);
 	}
-	
+
 	@PostMapping
 	public Formulario cadastrar(@RequestBody Formulario formulario) {
+		
+		conversao(formulario, null);
+		
 		return transferenciaRepository.save(formulario);
 	}
 
@@ -130,7 +167,7 @@ public class GerarPdfController {
 		return transferenciaRepository.save(formulario);
 
 	}
-	
+
 	@GetMapping("/debug")
 	public String debug() throws InterruptedException {
 		Thread.sleep(3000);
@@ -140,5 +177,5 @@ public class GerarPdfController {
 		else
 			return "debug";
 	}
- 
+
 }
