@@ -3,6 +3,10 @@ package com.example.pocapi.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -54,11 +58,20 @@ public class GerarPdfController {
 		DateTimeFormatter formatadorLeilao = DateTimeFormatter.ofPattern("ddMMyyyy");
 		String dataLeilaoString = dataLeilaoOffSet.format(formatadorLeilao);
 		
-		
 		// ...
 		formulario.setDataAquisicao(dataAquisicaoString);
 		
 		formulario.setDataLeilao(dataLeilaoString);
+
+		
+        DecimalFormat nf = (DecimalFormat) NumberFormat.getInstance();
+        nf.setParseBigDecimal(true);
+
+        BigDecimal bd = (BigDecimal)nf.parse(formulario.getValorRecebido(), new ParsePosition(0));
+        
+      
+//		formulario.setValorRecebido(bd);
+        
 	}
 
 	@Autowired
@@ -154,7 +167,11 @@ public class GerarPdfController {
 	@PostMapping
 	public Formulario cadastrar(@RequestBody Formulario formulario) {
 		
-		conversao(formulario, null);
+//		conversao(formulario, null);
+		 DecimalFormat nf = (DecimalFormat) NumberFormat.getInstance();
+	        nf.setParseBigDecimal(true);
+
+	        BigDecimal bd = (BigDecimal)nf.parse(formulario.getValorRecebido(), new ParsePosition(0));
 		
 		return transferenciaRepository.save(formulario);
 	}
