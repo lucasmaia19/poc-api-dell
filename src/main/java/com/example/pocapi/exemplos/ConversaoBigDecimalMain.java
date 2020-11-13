@@ -5,39 +5,73 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+
+@Getter @Setter @ToString
+class Cliente {
+
+	private String apiPatrimonio;
+
+	private String uiPatrimonio;
+
+}
+
 public class ConversaoBigDecimalMain {
 
 	public static void main(String[] args) {
-		
-		// string para int
-		String a = "10";
-		int b = 20;
-		Integer valueOf = Integer.valueOf(a);
-		
-		System.out.println(valueOf + b);
-		
-		// string para bigdecimal
 
-		//	String str = "1.500,00";
+//		string2BigDecimalMoedaBR("123.45");
 
-		// Converte string formato decimal para objeto BigDecimal e depois para string formato moeda pt-BR
-		String str = "123.45";
-		BigDecimal num = new BigDecimal(str);
-		System.out.println(num);
+//		String valorFinal = stringValorMonetarioBR2BigDecimalFormatBancoDeDados("7.633,53");
+		
+//		System.out.println(valorFinal);
+
+//		Cliente lucas = new Cliente();
+//
+//		String valorFormatoApi = "500000.50";
+//		lucas.setApiPatrimonio(valorFormatoApi);
+//		
+//		String valorFormatoUi = string2BigDecimalMoedaBR(lucas.getApiPatrimonio());
+//		lucas.setUiPatrimonio(valorFormatoUi);
+//
+//		System.out.println(lucas);
+
+
+		Cliente joao = new Cliente();
+
+		String uiPatrimonio = "1.500,00";
+
+		joao.setUiPatrimonio(uiPatrimonio);
+
+		String valorFormatoApi2 = stringValorMonetarioBR2BigDecimalFormatBancoDeDados(joao.getUiPatrimonio());
+		joao.setApiPatrimonio(valorFormatoApi2);
+
+		System.out.println(joao);
+		
+	}
+
+	private static String string2BigDecimalMoedaBR(String string) {
+
+		BigDecimal num = new BigDecimal(string);
+
 		NumberFormat nf = NumberFormat.getCurrencyInstance();
-		System.out.println(nf.format(num));
 
+		String bidDecimalFormatado = nf.format(num);
+
+		return bidDecimalFormatado;
+	}
+
+	private static String stringValorMonetarioBR2BigDecimalFormatBancoDeDados (String string) {
+
+		DecimalFormat valorMonetarioDecimal = (DecimalFormat) NumberFormat.getInstance();
+		valorMonetarioDecimal.setParseBigDecimal(true);
+
+		BigDecimal valorMonetarioFormat = (BigDecimal)valorMonetarioDecimal.parse(string, new ParsePosition(0));
 		
-//		String num2 = "1.500,00";
-//					
-//		DecimalFormat num1 = (DecimalFormat) NumberFormat.getInstance();
-//		num1.setParseBigDecimal(true);
-//	
-//		BigDecimal bd = (BigDecimal)num1.parse(num2, new ParsePosition(0));
-//	
-//	 	System.out.println(bd);
-
-
+	 	return valorMonetarioFormat.toString();
 	}
 
 }
