@@ -25,9 +25,9 @@ public class ConversaoBigDecimalMain {
 
 //		string2BigDecimalMoedaBR("123.45");
 
-//		String valorFinal = stringValorMonetarioBR2BigDecimalFormatBancoDeDados("7.633,53");
+		String valorFinal = stringValorMonetarioBR2BigDecimalFormatBancoDeDados("500");
 		
-//		System.out.println(valorFinal);
+		System.out.println(valorFinal);
 
 //		Cliente lucas = new Cliente();
 //
@@ -40,17 +40,17 @@ public class ConversaoBigDecimalMain {
 //		System.out.println(lucas);
 
 
-		Cliente joao = new Cliente();
-
-		String uiPatrimonio = "1.500,00";
-
-		joao.setUiPatrimonio(uiPatrimonio);
-
-		String valorFormatoApi2 = stringValorMonetarioBR2BigDecimalFormatBancoDeDados(joao.getUiPatrimonio());
-		joao.setApiPatrimonio(valorFormatoApi2);
-
-		System.out.println(joao);
-		
+//		Cliente joao = new Cliente();
+//
+//		String uiPatrimonio = "1500";
+//
+//		joao.setUiPatrimonio(uiPatrimonio);
+//
+//		String valorFormatoApi2 = stringValorMonetarioBR2BigDecimalFormatBancoDeDados(joao.getUiPatrimonio());
+//		joao.setApiPatrimonio(valorFormatoApi2);
+//
+//		System.out.println(joao);
+//		
 	}
 
 	private static String string2BigDecimalMoedaBR(String string) {
@@ -65,11 +65,17 @@ public class ConversaoBigDecimalMain {
 	}
 
 	private static String stringValorMonetarioBR2BigDecimalFormatBancoDeDados (String string) {
+		
+		String valorRecebido = string;
+		
+		valorRecebido = string + ",00";
+		
+		System.out.println(valorRecebido);
 
 		DecimalFormat valorMonetarioDecimal = (DecimalFormat) NumberFormat.getInstance();
 		valorMonetarioDecimal.setParseBigDecimal(true);
 
-		BigDecimal valorMonetarioFormat = (BigDecimal)valorMonetarioDecimal.parse(string, new ParsePosition(0));
+		BigDecimal valorMonetarioFormat = (BigDecimal)valorMonetarioDecimal.parse(valorRecebido, new ParsePosition(0));
 		
 	 	return valorMonetarioFormat.toString();
 	}

@@ -3,6 +3,10 @@ package com.example.pocapi.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -56,34 +60,39 @@ public class GerarPdfController {
 		formulario.setDataLeilao(dataLeilaoString);
         
 	}
+	
+	void acrescentar00(@RequestBody Formulario formulario) {
+		
+		String valorRecebido = formulario.getValorRecebido() + ".00";
+		formulario.setValorRecebido(valorRecebido);
+		System.out.println(valorRecebido);
+	}
+	
+	private static String stringValorMonetarioBR2BigDecimalFormatBancoDeDados (@RequestBody Formulario formulario ,String string) {
+
+		String valorRecebido = string + ".00";
+
+		DecimalFormat valorMonetarioDecimal = (DecimalFormat) NumberFormat.getInstance();
+		valorMonetarioDecimal.setParseBigDecimal(true);
+
+		BigDecimal valorMonetarioFormat = (BigDecimal)valorMonetarioDecimal.parse(valorRecebido, new ParsePosition(0));
+		
+		formulario.setValorRecebido(valorRecebido);
+		
+	 	return valorMonetarioFormat.toString();
+	}
 
 	@Autowired
 	TransferenciaService transferenciaService;
 
 	@Autowired
 	private TransferenciaRepository transferenciaRepository;
-	
-	/*
-	@GetMapping(value = "/image")
-	public @ResponseBody byte[] getImage() throws IOException {
-	    InputStream in = getClass()
-	      .getResourceAsStream("//home//lucas//Downloads//servicosDetran.pdf");
-	    return IOUtils.toByteArray(in);
-	}
-
-	
-	 @GetMapping(value = "/image", produces =
-	 MediaType.APPLICATION_OCTET_STREAM_VALUE) public @ResponseBody byte[]
-	 getFile() throws IOException { // final InputStream in =
-	 getClass().getResourceAsStream("imagem.jpg"); ClassPathResource pdfFile = new
-	 ClassPathResource("imagem.jpg"); return IOUtils.toByteArray(in); }
-	 */
 
 	@GetMapping(value = "/image", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public ResponseEntity<Object> PegarPDF() throws IOException, InterruptedException {
 		
-		System.out.println("Espera 10 segundos");
-        Thread.sleep(2000);
+		System.out.println("Espera 5 segundos");
+        Thread.sleep(3000);
 
 		String tmpDirectory = System.getProperty("java.io.tmpdir");
 		
@@ -121,13 +130,8 @@ public class GerarPdfController {
 	}
 
 	@DeleteMapping("/{id}")
-// @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
-//	@DeleteMapping(path = "/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
-//	public Map<String, Object> deletar(@PathVariable Long id) {
 	public Map<String, Object> deletar(@PathVariable Long id) {
 		transferenciaRepository.deleteById(id);
-		
-//		return "A cidade com Id: " + id + " Foi deletado com sucesso";
 		
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("TestoDaResposta", "O cadastro com Id: " + id + " Foi deletado com sucesso");
@@ -142,6 +146,11 @@ public class GerarPdfController {
 
 		ConversaoDate2String(formulario, id);
 		
+		acrescentar00(formulario);
+		
+//		stringValorMonetarioBR2BigDecimalFormatBancoDeDados(formularioSaved, formulario.getValorRecebido());
+		
+		
 		BeanUtils.copyProperties(formulario, formularioSaved, "id");
 
 		return transferenciaRepository.save(formularioSaved);
@@ -151,6 +160,8 @@ public class GerarPdfController {
 	public Formulario cadastrar(@RequestBody Formulario formulario) {
 		
 		ConversaoDate2String(formulario, null);
+		
+		acrescentar00(formulario);
 		
 		return transferenciaRepository.save(formulario);
 	}

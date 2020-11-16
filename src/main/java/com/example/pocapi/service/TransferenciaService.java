@@ -49,7 +49,7 @@ public class TransferenciaService {
 
 		// Compilar sem abrir janela
 		ChromeOptions options = new ChromeOptions();
-		options.setHeadless(false);
+		options.setHeadless(true);
 		options.setExperimentalOption("prefs", chromePref);
 
 		driver = new ChromeDriver(options);
@@ -57,11 +57,6 @@ public class TransferenciaService {
 
 	private void deletarArquivo(String tmpDirectory) {
 		File file = new File(tmpDirectory + "servicosDetran.pdf");
-
-//		boolean apagado = FileUtils.deleteQuietly(file);
-//		if (apagado) {
-//			System.out.println("Arquivo apagado");
-//		}
 
 		if (FileUtils.deleteQuietly(file))
 			System.out.println("Arquivo apagado");
@@ -76,32 +71,6 @@ public class TransferenciaService {
 		// Config web ...
 		String link = ("https://www.detran.mg.gov.br/veiculos/transferencia-de-propriedade/transferencia-de-propriedade");
 		driver.get(link);
-
-//		String placa = "HOC9880";
-//		String chassi = "9C6KE1500B0001618";
-//		String renavam = "00255123361";
-//		String valorRecibo = "1000,00";
-//		String dataAquisicao = "15012020";
-//		String numeroCRV = "123456789101112";
-//		String dataLeilao = "01022019";
-//		String ufDeOrigem = "Minas Gerais";
-//		String NomeAdquirente = "Vicente Leonardo Drumond";
-//		String cnpj = "CNPJ";
-//		String cnpjNumero = "91098219000120";
-//		String cep = "30668171";
-//		String endereco = "Beco N";
-//		String numero = "838";
-//		String complemento = "Casa";
-//		String bairro = "Vila Formosa Vale do";
-//		String cpf = "CPF";
-//		String cpfNumero = "19650069062";
-//		String motivoJudicial = "Formal de partilha";
-//		String ordemJudicial = "23423";
-//		String financiamento = "Sem Financiamento";
-//		String categoria = "PARTIC";
-//		String cilindros = "5";
-//		String ipva = "Não";
-//		String atividade = "Escolar";
 
 //		 Dados do clientes
 		String placa = formulario.getPlaca();
