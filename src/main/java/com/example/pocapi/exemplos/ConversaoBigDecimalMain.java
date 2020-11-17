@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.example.pocapi.model.Formulario;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +29,15 @@ public class ConversaoBigDecimalMain {
 
 	public static void main(String[] args) {
 
-//		string2BigDecimalMoedaBR("123.45");
+//		String valorFinal = string2BigDecimalMoedaBR("200.33");
 
-		String valorFinal = stringValorMonetarioBR2BigDecimalFormatBancoDeDados("500");
+		
+		String valorFinal = acrescentar00("200.44");
 		
 		System.out.println(valorFinal);
+		
+//		String valorFinal = stringValorMonetarioBR2BigDecimalFormatBancoDeDados("200");
+		
 
 //		Cliente lucas = new Cliente();
 //
@@ -50,7 +60,7 @@ public class ConversaoBigDecimalMain {
 //		joao.setApiPatrimonio(valorFormatoApi2);
 //
 //		System.out.println(joao);
-//		
+		
 	}
 
 	private static String string2BigDecimalMoedaBR(String string) {
@@ -68,7 +78,7 @@ public class ConversaoBigDecimalMain {
 		
 		String valorRecebido = string;
 		
-		valorRecebido = string + ",00";
+//		valorRecebido = string + ",00";
 		
 		System.out.println(valorRecebido);
 
@@ -78,6 +88,22 @@ public class ConversaoBigDecimalMain {
 		BigDecimal valorMonetarioFormat = (BigDecimal)valorMonetarioDecimal.parse(valorRecebido, new ParsePosition(0));
 		
 	 	return valorMonetarioFormat.toString();
+	}
+	
+	static String acrescentar00(String string) {
+		
+		Pattern p = Pattern.compile(".*[.]..");
+		Matcher m = p.matcher(string);
+		boolean b = m.matches();
+		
+		if(b) 
+			return string;
+		 else {
+			String valorRecebido = string + ".00";
+			System.out.println(valorRecebido);
+			return valorRecebido;
+		
+		 }
 	}
 
 }

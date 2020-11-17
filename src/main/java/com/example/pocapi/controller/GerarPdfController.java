@@ -14,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,23 +63,38 @@ public class GerarPdfController {
         
 	}
 	
-	void acrescentar00(@RequestBody Formulario formulario) {
+	String acrescentar00(@RequestBody Formulario formulario) {
 		
+		String valorRecebidoui = formulario.getValorRecebido();
+		
+		Pattern p = Pattern.compile(".*[.]..");
+		Matcher m = p.matcher(formulario.getValorRecebido());
+		boolean b = m.matches();
+		
+		if(b) {
+			return formulario.getValorRecebido();
+		} else {
+			
 		String valorRecebido = formulario.getValorRecebido() + ".00";
 		formulario.setValorRecebido(valorRecebido);
 		System.out.println(valorRecebido);
+		return valorRecebido;
+		
+		}
+		
 	}
+		
 	
 	private static String stringValorMonetarioBR2BigDecimalFormatBancoDeDados (@RequestBody Formulario formulario ,String string) {
 
-		String valorRecebido = string + ".00";
+//		String valorRecebido = string + ".00";
 
 		DecimalFormat valorMonetarioDecimal = (DecimalFormat) NumberFormat.getInstance();
 		valorMonetarioDecimal.setParseBigDecimal(true);
 
-		BigDecimal valorMonetarioFormat = (BigDecimal)valorMonetarioDecimal.parse(valorRecebido, new ParsePosition(0));
+		BigDecimal valorMonetarioFormat = (BigDecimal)valorMonetarioDecimal.parse(string, new ParsePosition(0));
 		
-		formulario.setValorRecebido(valorRecebido);
+		formulario.setValorRecebido(string);
 		
 	 	return valorMonetarioFormat.toString();
 	}
@@ -147,6 +164,7 @@ public class GerarPdfController {
 		ConversaoDate2String(formulario, id);
 		
 		acrescentar00(formulario);
+//		stringValorMonetarioBR2BigDecimalFormatBancoDeDados(formulario, formulario.getValorRecebido());
 		
 //		stringValorMonetarioBR2BigDecimalFormatBancoDeDados(formularioSaved, formulario.getValorRecebido());
 		
@@ -161,7 +179,8 @@ public class GerarPdfController {
 		
 		ConversaoDate2String(formulario, null);
 		
-		acrescentar00(formulario);
+		
+//		acrescentar00(formulario);
 		
 		return transferenciaRepository.save(formulario);
 	}
